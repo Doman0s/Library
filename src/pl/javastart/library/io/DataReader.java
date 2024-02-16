@@ -13,17 +13,21 @@ public class DataReader {
         System.out.println("Author: ");
         String author = scanner.nextLine();
         System.out.println("releaseDate: ");
-        int releaseDate = scanner.nextInt();
-        scanner.nextLine();
+        int releaseDate = getInt();
         System.out.println("pages: ");
-        int pages = scanner.nextInt();
-        scanner.nextLine();
+        int pages = getInt();
         System.out.println("publisher: ");
         String publisher = scanner.nextLine();
         System.out.println("isbn: ");
         String isbn = scanner.nextLine();
 
         return new Book(title, author, releaseDate, pages, publisher, isbn);
+    }
+
+    public int getInt() {
+        int number = scanner.nextInt();
+        scanner.nextLine();
+        return number;
     }
 
     public void close() {
