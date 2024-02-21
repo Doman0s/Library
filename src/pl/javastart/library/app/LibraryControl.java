@@ -6,35 +6,27 @@ import pl.javastart.library.model.Library;
 import pl.javastart.library.model.Magazine;
 
 class LibraryControl {
-    private static final int EXIT = 0;
-    private static final int ADD_BOOK = 1;
-    private static final int ADD_MAGAZINE = 2;
-    private static final int PRINT_BOOKS = 3;
-    private static final int PRINT_MAGAZINES = 4;
-
     private DataReader dataReader = new DataReader();
     private Library library = new Library();
 
     void controlLoop() {
-        int option;
+        Option option;
         do {
             printOptions();
-            option = dataReader.getInt();
+            option = Option.createFromInt(dataReader.getInt());
             processOption(option);
-        } while (option != EXIT);
+        } while (option != Option.EXIT);
     }
 
     private void printOptions() {
         System.out.println("\nSelect an option");
-        System.out.println(EXIT + " - exit application");
-        System.out.println(ADD_BOOK + " - add new book");
-        System.out.println(ADD_MAGAZINE + " - add new magazine");
-        System.out.println(PRINT_BOOKS + " - print all available books");
-        System.out.println(PRINT_MAGAZINES + " - print all available magazines");
+        for (Option option : Option.values()) {
+            System.out.println(option);
+        }
     }
 
-    private void processOption(int choice) {
-        switch (choice) {
+    private void processOption(Option option) {
+        switch (option) {
             case EXIT -> exit();
             case ADD_BOOK -> addBook();
             case ADD_MAGAZINE -> addMagazine();
