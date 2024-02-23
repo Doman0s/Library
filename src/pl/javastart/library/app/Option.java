@@ -1,5 +1,7 @@
 package pl.javastart.library.app;
 
+import pl.javastart.library.exception.NoSuchOptionException;
+
 enum Option {
     EXIT(0, "exit application"),
     ADD_BOOK(1, "add new book"),
@@ -23,8 +25,12 @@ enum Option {
         return description;
     }
 
-    static Option createFromInt(int option) {
-        return Option.values()[option];
+    static Option createFromInt(int option) throws NoSuchOptionException {
+        try {
+            return Option.values()[option];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new NoSuchOptionException("No option with id " + option);
+        }
     }
 
     @Override
