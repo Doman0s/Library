@@ -1,8 +1,12 @@
 package pl.javastart.library.app;
 
+import pl.javastart.library.exception.DataExportException;
+import pl.javastart.library.exception.DataImportException;
 import pl.javastart.library.exception.NoSuchOptionException;
 import pl.javastart.library.io.ConsolePrinter;
 import pl.javastart.library.io.DataReader;
+import pl.javastart.library.io.file.FileManager;
+import pl.javastart.library.io.file.FileManagerBuilder;
 import pl.javastart.library.model.Book;
 import pl.javastart.library.model.Library;
 import pl.javastart.library.model.Magazine;
@@ -11,8 +15,22 @@ import java.util.InputMismatchException;
 
 class LibraryControl {
     private ConsolePrinter printer = new ConsolePrinter();
-    private DataReader dataReader = new DataReader(printer);
-    private Library library = new Library();
+    private DataReader reader = new DataReader(printer);
+    private FileManager fileManager;
+
+    private Library library;
+
+    LibraryControl() {
+        fileManager = new FileManagerBuilder(printer, reader).build();
+        try {
+            library = fileManager.importData();
+            printer.printLine("Data from the file has been successfully imported.");
+        } catch (DataImportException e) {
+            printer.printLine(e.getMessage());
+            printer.printLine("A new database has been initialized.");
+            library = new Library();
+        }
+    }
 
     void controlLoop() {
         Option option;
@@ -36,7 +54,7 @@ class LibraryControl {
 
         do {
             try {
-                option = Option.createFromInt(dataReader.getInt());
+                option = Option.createFromInt(reader.getInt());
                 optionOk = true;
             } catch (NoSuchOptionException e) {
                 printer.printLine(e.getMessage());
@@ -61,7 +79,7 @@ class LibraryControl {
 
     private void addBook() {
         try {
-            Book book = dataReader.readAndCreateBook();
+            Book book = reader.readAndCreateBook();
             library.addBook(book);
             printer.printLine("Added successfully.");
         } catch (InputMismatchException e) {
@@ -77,7 +95,7 @@ class LibraryControl {
 
     private void addMagazine() {
         try {
-            Magazine magazine = dataReader.readAndCreateMagazine();
+            Magazine magazine = reader.readAndCreateMagazine();
             library.addMagazine(magazine);
             printer.printLine("Added successfully.");
         } catch (InputMismatchException e) {
@@ -92,8 +110,14 @@ class LibraryControl {
     }
 
     private void exit() {
+        try {
+            fileManager.exportData(library);
+            printer.printLine("Export data to file completed successfully.");
+        } catch (DataExportException e) {
+            printer.printLine(e.getMessage());
+        }
         printer.printLine("Closing library, bye.");
-        dataReader.close();
+        reader.close();
     }
 
     private enum Option {
