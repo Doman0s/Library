@@ -27,7 +27,7 @@ public class DataReader {
         printer.printLine("ISBN: ");
         String isbn = scanner.nextLine();
 
-        return new Book(title, releaseYear, publisher, author, pages, isbn);
+        return new Book(title, publisher, releaseYear, author, pages, isbn);
     }
 
     public Magazine readAndCreateMagazine() {
@@ -44,7 +44,7 @@ public class DataReader {
         printer.printLine("Release year: ");
         int releaseYear = getInt();
 
-        return new Magazine(title, publisher, language, day, month, releaseYear);
+        return new Magazine(title, publisher, releaseYear, day, month, language);
     }
 
     public int getInt() {

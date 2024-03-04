@@ -1,35 +1,42 @@
 package pl.javastart.library.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Library implements Serializable {
-    private static final int PUBLICATIONS_LIMIT = 2000;
-    private Publication[] publications = new Publication[PUBLICATIONS_LIMIT];
+    private static final int INITIAL_CAPACITY = 1;
+    private Publication[] publications = new Publication[INITIAL_CAPACITY];
     private int publicationsNumber = 0;
 
     public Publication[] getPublications() {
-        Publication[] result = new Publication[publicationsNumber];
-        for (int i = 0; i < publicationsNumber; i++) {
-            result[i] = publications[i];
-        }
-        return result;
+        return Arrays.copyOf(publications, publicationsNumber);
     }
 
-    public void addBook(Book book) {
-        addPublication(book);
-    }
-
-    public void addMagazine(Magazine magazine) {
-        addPublication(magazine);
-    }
-
-    private void addPublication(Publication publication) {
-        if (publicationsNumber >= PUBLICATIONS_LIMIT) {
-            throw new ArrayIndexOutOfBoundsException(
-                    "The maximum number of publications has been reached. The limit is " + PUBLICATIONS_LIMIT
-            );
+    public void addPublication(Publication publication) {
+        if (publicationsNumber >= publications.length) {
+            publications = Arrays.copyOf(publications, publications.length * 2);
         }
         publications[publicationsNumber] = publication;
         publicationsNumber++;
+    }
+
+    public boolean removePublication(Publication publication) {
+        final int notFound = 1;
+        int found = notFound;
+
+        for (int i = 0; i < publicationsNumber && found == notFound; i++) {
+            if (publication.getTitle().equals(publications[i].getTitle())) {
+                found = i;
+            }
+        }
+
+        if (found != notFound) {
+            System.arraycopy(
+                    publications, found + 1, publications, found, publications.length - found - 1
+            );
+            publicationsNumber--;
+            publications[publicationsNumber] = null;
+        }
+        return found != notFound;
     }
 }

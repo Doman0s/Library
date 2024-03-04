@@ -2,6 +2,7 @@ package pl.javastart.library.app;
 
 import pl.javastart.library.exception.DataExportException;
 import pl.javastart.library.exception.DataImportException;
+import pl.javastart.library.exception.InvalidDataException;
 import pl.javastart.library.exception.NoSuchOptionException;
 import pl.javastart.library.io.ConsolePrinter;
 import pl.javastart.library.io.DataReader;
@@ -14,9 +15,9 @@ import pl.javastart.library.model.Magazine;
 import java.util.InputMismatchException;
 
 class LibraryControl {
-    private ConsolePrinter printer = new ConsolePrinter();
-    private DataReader reader = new DataReader(printer);
-    private FileManager fileManager;
+    private final ConsolePrinter printer = new ConsolePrinter();
+    private final DataReader reader = new DataReader(printer);
+    private final FileManager fileManager;
 
     private Library library;
 
@@ -25,7 +26,7 @@ class LibraryControl {
         try {
             library = fileManager.importData();
             printer.printLine("Data from the file has been successfully imported.");
-        } catch (DataImportException e) {
+        } catch (DataImportException | InvalidDataException e) {
             printer.printLine(e.getMessage());
             printer.printLine("A new database has been initialized.");
             library = new Library();
@@ -69,9 +70,11 @@ class LibraryControl {
     private void processOption(Option option) {
         switch (option) {
             case ADD_BOOK -> addBook();
+            case DELETE_BOOK -> deleteBook();
             case PRINT_BOOKS -> printBooks();
             case ADD_MAGAZINE -> addMagazine();
             case PRINT_MAGAZINES -> printMagazines();
+            case DELETE_MAGAZINE -> deleteMagazine();
             case EXIT -> exit();
             default -> printer.printLine("Incorrect option.");
         }
@@ -80,12 +83,25 @@ class LibraryControl {
     private void addBook() {
         try {
             Book book = reader.readAndCreateBook();
-            library.addBook(book);
+            library.addPublication(book);
             printer.printLine("Added successfully.");
         } catch (InputMismatchException e) {
             printer.printLine("Failed to create a book, incorrect data.");
         } catch (ArrayIndexOutOfBoundsException e) {
             printer.printLine(e.getMessage());
+        }
+    }
+
+    private void deleteBook() {
+        try {
+            Book book = reader.readAndCreateBook();
+            if (library.removePublication(book)) {
+                printer.printLine("Book successfully deleted.");
+            } else {
+                printer.printLine("Book not found.");
+            }
+        } catch (InputMismatchException e) {
+            printer.printLine("Failed to delete a book, incorrect data.");
         }
     }
 
@@ -96,12 +112,25 @@ class LibraryControl {
     private void addMagazine() {
         try {
             Magazine magazine = reader.readAndCreateMagazine();
-            library.addMagazine(magazine);
+            library.addPublication(magazine);
             printer.printLine("Added successfully.");
         } catch (InputMismatchException e) {
             printer.printLine("Failed to create a magazine, incorrect data.");
         } catch (ArrayIndexOutOfBoundsException e) {
             printer.printLine(e.getMessage());
+        }
+    }
+
+    private void deleteMagazine() {
+        try {
+            Magazine magazine = reader.readAndCreateMagazine();
+            if (library.removePublication(magazine)) {
+                printer.printLine("Magazine successfully deleted.");
+            } else {
+                printer.printLine("Magazine not found.");
+            }
+        } catch (InputMismatchException e) {
+            printer.printLine("Failed to delete a magazine, incorrect data.");
         }
     }
 
@@ -123,9 +152,11 @@ class LibraryControl {
     private enum Option {
         EXIT(0, "exit application"),
         ADD_BOOK(1, "add new book"),
-        ADD_MAGAZINE(2,"add new magazine"),
-        PRINT_BOOKS(3, "print all available books"),
-        PRINT_MAGAZINES(4, "print all available magazines");
+        DELETE_BOOK(2, "delete book"),
+        ADD_MAGAZINE(3,"add new magazine"),
+        DELETE_MAGAZINE(4, "delete magazine"),
+        PRINT_BOOKS(5, "print all available books"),
+        PRINT_MAGAZINES(6, "print all available magazines");
 
         private final int value;
         private final String description;

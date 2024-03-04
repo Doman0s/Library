@@ -3,11 +3,12 @@ package pl.javastart.library.model;
 import java.util.Objects;
 
 public class Magazine extends Publication {
+    public static final String TYPE = "Magazine";
     private int day;
     private int month;
     private String language;
 
-    public Magazine(String title, String publisher,String language, int day, int month, int releaseYear) {
+    public Magazine(String title, String publisher, int releaseYear, int day, int month, String language) {
         super(title, publisher, releaseYear);
         this.day = day;
         this.month = month;
@@ -36,6 +37,17 @@ public class Magazine extends Publication {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    @Override
+    public String toCsv() {
+        return TYPE + ";" +
+                getTitle() + ";" +
+                getPublisher() + ";" +
+                getReleaseYear() + ";" +
+                day + ";" +
+                month + ";" +
+                language;
     }
 
     @Override

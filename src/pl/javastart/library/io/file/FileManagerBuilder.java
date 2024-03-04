@@ -5,8 +5,8 @@ import pl.javastart.library.io.ConsolePrinter;
 import pl.javastart.library.io.DataReader;
 
 public class FileManagerBuilder {
-    private ConsolePrinter printer;
-    private DataReader reader;
+    private final ConsolePrinter printer;
+    private final DataReader reader;
 
     public FileManagerBuilder(ConsolePrinter printer, DataReader reader) {
         this.printer = printer;
@@ -19,6 +19,7 @@ public class FileManagerBuilder {
 
         return switch (fileType) {
             case SERIAL -> new SerializableFileManager();
+            case CSV -> new CsvFileManager();
             default -> throw new NoSuchFileTypeException("Unsupported data type.");
         };
     }

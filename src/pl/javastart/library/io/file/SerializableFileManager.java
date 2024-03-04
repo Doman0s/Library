@@ -14,10 +14,10 @@ class SerializableFileManager implements FileManager {
         Library library;
 
         try (
-                var fis = new FileInputStream(FILE_NAME);
-                var ois = new ObjectInputStream(fis)
+                FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
+                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)
         ) {
-            library = (Library) ois.readObject();
+            library = (Library) objectInputStream.readObject();
         } catch (FileNotFoundException e) {
             throw new DataImportException(FILE_NAME + " not found");
         } catch (IOException e) {
@@ -31,10 +31,10 @@ class SerializableFileManager implements FileManager {
     @Override
     public void exportData(Library library) {
         try (
-                var fos = new FileOutputStream(FILE_NAME);
-                var oos = new ObjectOutputStream(fos)
+                FileOutputStream fileOutputStream = new FileOutputStream(FILE_NAME);
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)
         ) {
-            oos.writeObject(library);
+            objectOutputStream.writeObject(library);
         } catch (FileNotFoundException e) {
             throw new DataExportException(FILE_NAME + " not found");
         } catch (IOException e) {
