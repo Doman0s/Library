@@ -3,7 +3,7 @@ package pl.javastart.library.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Publication implements Serializable {
+public abstract class Publication implements Serializable, Comparable<Publication> {
     private String title;
     private String publisher;
     private int releaseYear;
@@ -14,27 +14,27 @@ public abstract class Publication implements Serializable {
         this.releaseYear = releaseYear;
     }
 
-    String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    void setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    String getPublisher() {
+    public String getPublisher() {
         return publisher;
     }
 
-    void setPublisher(String publisher) {
+    public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
 
-    int getReleaseYear() {
+    public int getReleaseYear() {
         return releaseYear;
     }
 
-    void setReleaseYear(int releaseYear) {
+    public void setReleaseYear(int releaseYear) {
         this.releaseYear = releaseYear;
     }
 
@@ -57,5 +57,10 @@ public abstract class Publication implements Serializable {
     @Override
     public String toString() {
         return title + "; " + publisher + "; " + releaseYear;
+    }
+
+    @Override
+    public int compareTo(Publication p) {
+        return title.compareToIgnoreCase(p.title);
     }
 }
