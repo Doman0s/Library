@@ -1,22 +1,14 @@
 package pl.javastart.library.app;
 
-import pl.javastart.library.exception.DataExportException;
-import pl.javastart.library.exception.DataImportException;
-import pl.javastart.library.exception.InvalidDataException;
-import pl.javastart.library.exception.NoSuchOptionException;
+import pl.javastart.library.exception.*;
 import pl.javastart.library.io.ConsolePrinter;
 import pl.javastart.library.io.DataReader;
 import pl.javastart.library.io.file.FileManager;
 import pl.javastart.library.io.file.FileManagerBuilder;
-import pl.javastart.library.model.Book;
-import pl.javastart.library.model.Library;
-import pl.javastart.library.model.Magazine;
-import pl.javastart.library.model.Publication;
+import pl.javastart.library.model.*;
 import pl.javastart.library.model.comparator.AlphabeticalComparator;
-import pl.javastart.library.model.comparator.DateComparator;
 
-import java.util.Arrays;
-import java.util.InputMismatchException;
+import java.util.*;
 
 class LibraryControl {
     private final ConsolePrinter printer = new ConsolePrinter();
@@ -79,6 +71,8 @@ class LibraryControl {
             case ADD_MAGAZINE -> addMagazine();
             case PRINT_MAGAZINES -> printMagazines();
             case DELETE_MAGAZINE -> deleteMagazine();
+            case ADD_USER -> addUser();
+            case PRINT_USERS -> printUsers();
             case EXIT -> exit();
             default -> printer.printLine("Incorrect option.");
         }
@@ -110,14 +104,8 @@ class LibraryControl {
     }
 
     private void printBooks() {
-        Publication[] publications = getSortedPublication();
+        Collection<Publication> publications = library.getPublications().values();
         printer.printBooks(publications);
-    }
-
-    private Publication[] getSortedPublication() {
-        Publication[] publications = library.getPublications();
-        Arrays.sort(publications, new AlphabeticalComparator());
-        return publications;
     }
 
     private void addMagazine() {
@@ -146,8 +134,23 @@ class LibraryControl {
     }
 
     private void printMagazines() {
-        Publication[] publications = getSortedPublication();
+        Collection<Publication> publications = library.getPublications().values();
         printer.printMagazines(publications);
+    }
+
+    private void addUser() {
+        LibraryUser user = reader.createLibraryUser();
+        try {
+            library.addUser(user);
+            printer.printLine("Added successfully.");
+        } catch (UserAlreadyExistsException e) {
+            printer.printLine(e.getMessage());
+        }
+    }
+
+    private void printUsers() {
+        Collection<LibraryUser> users = library.getUsers().values();
+        printer.printUsers(users);
     }
 
     private void exit() {
@@ -168,7 +171,9 @@ class LibraryControl {
         ADD_MAGAZINE(3,"add new magazine"),
         DELETE_MAGAZINE(4, "delete magazine"),
         PRINT_BOOKS(5, "print all available books"),
-        PRINT_MAGAZINES(6, "print all available magazines");
+        PRINT_MAGAZINES(6, "print all available magazines"),
+        ADD_USER(7, "add new user"),
+        PRINT_USERS(8, "print all users");
 
         private final int value;
         private final String description;
