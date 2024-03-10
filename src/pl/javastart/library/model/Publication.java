@@ -1,9 +1,11 @@
 package pl.javastart.library.model;
 
+import pl.javastart.library.io.file.CsvConvertible;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Publication implements Serializable, Comparable<Publication> {
+public abstract class Publication implements Serializable, Comparable<Publication>, CsvConvertible {
     private String title;
     private String publisher;
     private int releaseYear;
@@ -37,8 +39,6 @@ public abstract class Publication implements Serializable, Comparable<Publicatio
     public void setReleaseYear(int releaseYear) {
         this.releaseYear = releaseYear;
     }
-
-    public abstract String toCsv();
 
     @Override
     public boolean equals(Object o) {

@@ -102,33 +102,27 @@ class CsvFileManager implements FileManager {
         exportUsers(library);
     }
 
-    private void exportPublications(Library library) {
-        Collection<Publication> publications = library.getPublications().values();
+    private <T extends CsvConvertible> void exportToCsv(Collection<T> collection, String fileName) {
         try (
-                FileWriter fileWriter = new FileWriter(FILE_NAME);
-                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)
+            FileWriter fileWriter = new FileWriter(fileName);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)
         ) {
-            for (Publication publication : publications) {
-                bufferedWriter.write(publication.toCsv());
+            for (T t : collection) {
+                bufferedWriter.write(t.toCsv());
                 bufferedWriter.newLine();
             }
         } catch (IOException e) {
-            throw new DataExportException("Error writing data to file " + FILE_NAME);
+            throw new DataExportException("Error writing data to file " + fileName);
         }
+    }
+
+    private void exportPublications(Library library) {
+        Collection<Publication> publications = library.getPublications().values();
+        exportToCsv(publications, FILE_NAME);
     }
 
     private void exportUsers(Library library) {
         Collection<LibraryUser> users = library.getUsers().values();
-        try (
-                FileWriter fileWriter = new FileWriter(USERS_FILE_NAME);
-                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)
-        ) {
-            for (LibraryUser user : users) {
-                bufferedWriter.write(user.toCsv());
-                bufferedWriter.newLine();
-            }
-        } catch (IOException e) {
-            throw new DataExportException("Error writing data to file " + USERS_FILE_NAME);
-        }
+        exportToCsv(users, USERS_FILE_NAME);
     }
 }
