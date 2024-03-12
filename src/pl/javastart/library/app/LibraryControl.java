@@ -6,7 +6,6 @@ import pl.javastart.library.io.DataReader;
 import pl.javastart.library.io.file.FileManager;
 import pl.javastart.library.io.file.FileManagerBuilder;
 import pl.javastart.library.model.*;
-import pl.javastart.library.model.comparator.AlphabeticalTitleComparator;
 
 import java.util.*;
 
@@ -104,7 +103,8 @@ class LibraryControl {
     }
 
     private void printBooks() {
-        Collection<Publication> publications = library.getSortedPublications(new AlphabeticalTitleComparator());
+        Collection<Publication> publications = library.getSortedPublications(
+                (p1, p2) -> p1.getTitle().compareToIgnoreCase(p2.getTitle()));
         printer.printBooks(publications);
     }
 
@@ -134,7 +134,8 @@ class LibraryControl {
     }
 
     private void printMagazines() {
-        Collection<Publication> publications = library.getSortedPublications(new AlphabeticalTitleComparator());
+        Collection<Publication> publications = library.getSortedPublications(
+                (p1, p2) -> p1.getTitle().compareToIgnoreCase(p2.getTitle()));
         printer.printMagazines(publications);
     }
 
@@ -149,12 +150,8 @@ class LibraryControl {
     }
 
     private void printUsers() {
-        Collection<LibraryUser> users = library.getSortedUsers(new Comparator<LibraryUser>() {
-            @Override
-            public int compare(LibraryUser user1, LibraryUser user2) {
-                return user1.getLastName().compareToIgnoreCase(user2.getLastName());
-            }
-        });
+        Collection<LibraryUser> users = library.getSortedUsers(
+                (u1, u2) -> u1.getLastName().compareToIgnoreCase(u2.getLastName()));
         printer.printUsers(users);
     }
 
