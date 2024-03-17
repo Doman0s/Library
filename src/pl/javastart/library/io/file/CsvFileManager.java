@@ -25,11 +25,9 @@ class CsvFileManager implements FileManager {
                 FileReader fileReader = new FileReader(FILE_NAME);
                 BufferedReader bufferedReader = new BufferedReader(fileReader)
         ) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                Publication publication = createPublicationFromString(line);
-                library.addPublication(publication);
-            }
+            bufferedReader.lines()
+                    .map(this::createPublicationFromString)
+                    .forEach(library::addPublication);
         } catch (FileNotFoundException e) {
             throw new DataImportException(FILE_NAME + " not found");
         } catch (IOException e) {
@@ -75,11 +73,9 @@ class CsvFileManager implements FileManager {
                 FileReader fileReader = new FileReader(USERS_FILE_NAME);
                 BufferedReader bufferedReader = new BufferedReader(fileReader)
         ) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                LibraryUser user = createUserFromString(line);
-                library.addUser(user);
-            }
+            bufferedReader.lines()
+                    .map(this::createUserFromString)
+                    .forEach(library::addUser);
         } catch (FileNotFoundException e) {
             throw new DataImportException(USERS_FILE_NAME + " not found");
         } catch (IOException e) {

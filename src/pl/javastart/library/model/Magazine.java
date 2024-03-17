@@ -1,34 +1,25 @@
 package pl.javastart.library.model;
 
+import java.time.MonthDay;
 import java.util.Objects;
 
 public class Magazine extends Publication {
     public static final String TYPE = "Magazine";
-    private int day;
-    private int month;
+    private MonthDay monthDay;
     private String language;
 
     public Magazine(String title, String publisher, int releaseYear, int day, int month, String language) {
         super(title, publisher, releaseYear);
-        this.day = day;
-        this.month = month;
+        this.monthDay = MonthDay.of(month, day);
         this.language = language;
     }
 
-    public int getDay() {
-        return day;
+    public MonthDay getMonthDay() {
+        return monthDay;
     }
 
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
+    public void setMonthDay(MonthDay monthDay) {
+        this.monthDay = monthDay;
     }
 
     public String getLanguage() {
@@ -45,8 +36,8 @@ public class Magazine extends Publication {
                 getTitle() + ";" +
                 getPublisher() + ";" +
                 getReleaseYear() + ";" +
-                day + ";" +
-                month + ";" +
+                monthDay.getDayOfMonth() + ";" +
+                monthDay.getMonthValue() + ";" +
                 language;
     }
 
@@ -56,16 +47,16 @@ public class Magazine extends Publication {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Magazine magazine = (Magazine) o;
-        return day == magazine.day && month == magazine.month && Objects.equals(language, magazine.language);
+        return Objects.equals(monthDay, magazine.monthDay) && Objects.equals(language, magazine.language);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), day, month, language);
+        return Objects.hash(super.hashCode(), monthDay, language);
     }
 
     @Override
     public String toString() {
-        return super.toString() + "-" + month + "-" + day + "; " + language;
+        return super.toString() + "-" + monthDay.getDayOfMonth() + "-" + monthDay.getMonthValue() + "; " + language;
     }
 }

@@ -3,17 +3,18 @@ package pl.javastart.library.model;
 import pl.javastart.library.io.file.CsvConvertible;
 
 import java.io.Serializable;
+import java.time.Year;
 import java.util.Objects;
 
 public abstract class Publication implements Serializable, Comparable<Publication>, CsvConvertible {
     private String title;
     private String publisher;
-    private int releaseYear;
+    private Year releaseYear;
 
     Publication(String title, String publisher, int releaseYear) {
         this.title = title;
         this.publisher = publisher;
-        this.releaseYear = releaseYear;
+        this.releaseYear = Year.of(releaseYear);
     }
 
     public String getTitle() {
@@ -32,11 +33,11 @@ public abstract class Publication implements Serializable, Comparable<Publicatio
         this.publisher = publisher;
     }
 
-    public int getReleaseYear() {
+    public Year getReleaseYear() {
         return releaseYear;
     }
 
-    public void setReleaseYear(int releaseYear) {
+    public void setReleaseYear(Year releaseYear) {
         this.releaseYear = releaseYear;
     }
 
@@ -45,8 +46,9 @@ public abstract class Publication implements Serializable, Comparable<Publicatio
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Publication that = (Publication) o;
-        return releaseYear == that.releaseYear && Objects.equals(title, that.title) &&
-                Objects.equals(publisher, that.publisher);
+        return Objects.equals(title, that.title) &&
+                Objects.equals(publisher, that.publisher) &&
+                Objects.equals(releaseYear, that.releaseYear);
     }
 
     @Override
