@@ -72,9 +72,20 @@ class LibraryControl {
             case DELETE_MAGAZINE -> deleteMagazine();
             case ADD_USER -> addUser();
             case PRINT_USERS -> printUsers();
+            case FIND_PUBLICATION -> findPublicationByTitle();
             case EXIT -> exit();
             default -> printer.printLine("Incorrect option.");
         }
+    }
+
+    private void findPublicationByTitle() {
+        printer.printLine("Enter publication title:");
+        String title = reader.getString();
+        String notFoundMessage = "Publication " + title + " not found.";
+
+        library.findPublicationByTitle(title)
+                .map(Publication::toString)
+                .ifPresentOrElse(printer::printLine, () -> printer.printLine(notFoundMessage));
     }
 
     private void addBook() {
@@ -175,7 +186,8 @@ class LibraryControl {
         PRINT_BOOKS(5, "print all available books"),
         PRINT_MAGAZINES(6, "print all available magazines"),
         ADD_USER(7, "add new user"),
-        PRINT_USERS(8, "print all users");
+        PRINT_USERS(8, "print all users"),
+        FIND_PUBLICATION(9, "find publication by title");
 
         private final int value;
         private final String description;
