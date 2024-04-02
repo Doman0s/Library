@@ -183,8 +183,8 @@ class LibraryControl {
         DELETE_BOOK(2, "delete book"),
         ADD_MAGAZINE(3,"add new magazine"),
         DELETE_MAGAZINE(4, "delete magazine"),
-        PRINT_BOOKS(5, "print all available books"),
-        PRINT_MAGAZINES(6, "print all available magazines"),
+        PRINT_BOOKS(5, "print all books"),
+        PRINT_MAGAZINES(6, "print all magazines"),
         ADD_USER(7, "add new user"),
         PRINT_USERS(8, "print all users"),
         FIND_PUBLICATION(9, "find publication by title");
