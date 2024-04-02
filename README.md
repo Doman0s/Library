@@ -3,7 +3,7 @@
 This project is a library management system implemented in Java as part of the Java course on JavaStart.pl. It aims to demonstrate practical Java programming skills, including file handling and object-oriented design principles.
 
 ## Features:
-1. **Adding New Publications:** Enables users to add new publications to the library system.
+1. **Adding New Publications:** Enables users to add new publications to the library.
 2. **Removing Publications:** Allows users to remove publications from the library.
 3. **Listing All Publications:** Provides functionality to list all publications stored in the library.
 4. **Adding New Users:** Facilitates the addition of new users to the library system.
