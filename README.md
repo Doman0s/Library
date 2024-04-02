@@ -1,4 +1,4 @@
-# Library Management System Project
+# Library Management System
 
 This project is a library management system implemented in Java as part of the Java course on JavaStart.pl. It aims to demonstrate practical Java programming skills, including file handling and object-oriented design principles.
 
